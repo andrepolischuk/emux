@@ -1,0 +1,7 @@
+{
+  "extends": "@rambler-tech/typedoc-config",
+  "readme": "README.md",
+  "name": "Modelly",
+  "entryPoints": "packages/*",
+  "out": "public"
+}
