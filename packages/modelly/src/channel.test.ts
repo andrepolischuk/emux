@@ -1,7 +1,7 @@
 import {Channel} from './channel'
 import {Events} from './events'
-import {Auth} from './test/auth'
-import {User} from './test/user'
+import {Auth, User} from './test/base'
+import {InjectedUser} from './test/injection'
 import {onceAnimationFrame} from './test/utils'
 
 test('create a model', () => {
@@ -153,6 +153,38 @@ test('async update a nested model', async () => {
     currentUser: {fetching: false, ...User.mock}
   })
   expect(authFn).toHaveBeenCalledTimes(4)
+  expect(userFn).toHaveBeenCalledTimes(2)
+})
+
+test('create a custom channel', async () => {
+  const api = {
+    getCurrentUser: jest.fn().mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(User.mock)
+          }, 100)
+        })
+    )
+  }
+
+  const user = new InjectedUser(api)
+  const userFn = jest.fn()
+
+  user.on(Events.UPDATE, userFn)
+
+  const promise = user.fetch()
+
+  await onceAnimationFrame()
+
+  expect(user).toEqual({api, fetching: true})
+  expect(userFn).toHaveBeenCalledTimes(1)
+  expect(api.getCurrentUser).toHaveBeenCalledTimes(1)
+
+  await promise
+  await onceAnimationFrame()
+
+  expect(user).toEqual({api, fetching: false, ...User.mock})
   expect(userFn).toHaveBeenCalledTimes(2)
 })
 

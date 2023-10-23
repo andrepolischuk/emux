@@ -24,7 +24,7 @@ yarn add modelly
 
 ```ts
 import {Channel, Events} from 'modelly'
-import * as api from './api'
+import {api} from './api'
 
 class User extends Channel {
   displayName?: string
@@ -38,6 +38,45 @@ class User extends Channel {
 }
 
 const currentUser = new User()
+
+currentUser.on(Events.UPDATE, () => {
+  // currentUser is fetched
+  // {displayName: '...', email: '...'}
+})
+
+currentUser.fetch()
+```
+
+### Extend a channel
+
+Example using dependency injection – API service into a model
+
+```ts
+import {Channel} from 'modelly'
+import {api, ApiService} from './api'
+
+class InjectedChannel extends Channel {
+  api: ApiService
+
+  constructor(api: ApiService) {
+    super()
+
+    this.api = api
+  }
+}
+
+class User extends InjectedChannel {
+  displayName?: string
+  email?: string
+
+  async fetch() {
+    const {displayName, email} = await this.api.getCurrentUser()
+    this.displayName = displayName
+    this.email = email
+  }
+}
+
+const currentUser = new User(api)
 
 currentUser.on(Events.UPDATE, () => {
   // currentUser is fetched
