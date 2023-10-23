@@ -4,6 +4,17 @@ import {Events} from './events'
 import {Listener} from './types'
 import {observe} from './observer'
 
+/** Transform model values before update */
+function beforeUpdate(prev: unknown, next: unknown, update: Listener): void {
+  if (prev instanceof Channel) {
+    prev.removeListener(Events.UPDATE, update)
+  }
+
+  if (next instanceof Channel) {
+    next.on(Events.UPDATE, update)
+  }
+}
+
 /**
  * Model update channel
  *
@@ -31,25 +42,11 @@ export class Channel {
   private listeners: Record<string, Listener[]> = {}
 
   constructor() {
-    setPrivateProperties(this, 'queue', 'listeners', 'beforeUpdate')
+    const update = (): void => this.emit(Events.UPDATE)
 
-    return observe(
-      this,
-      () => this.emit(Events.UPDATE),
-      this.queue,
-      this.beforeUpdate
-    )
-  }
+    setPrivateProperties(this, 'queue', 'listeners')
 
-  /** Transform model values before update */
-  private beforeUpdate(prev: unknown, next: unknown, listener: Listener): void {
-    if (prev instanceof Channel) {
-      prev.removeListener(Events.UPDATE, listener)
-    }
-
-    if (next instanceof Channel) {
-      next.on(Events.UPDATE, listener)
-    }
+    return observe(this, this.queue, update, beforeUpdate)
   }
 
   /** Check the listener is registered for a given event */
@@ -67,8 +64,7 @@ export class Channel {
    * const currentUser = new User()
    *
    * currentUser.on(Events.UPDATE, () => {
-   *   // currentUser is fetched
-   *   // {displayName: '...', email: '...'}
+   *   // current user is fetched {displayName: '...', email: '...'}
    * })
    *
    * currentUser.fetch()

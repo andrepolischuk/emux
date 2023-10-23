@@ -4,18 +4,18 @@ import {Listener} from './types'
 
 const observerKey = Symbol('observer')
 
-export function isObserver(value: any): boolean {
+function isObserver(value: any): boolean {
   return !!value && value[observerKey]
 }
 
-export interface BeforeUpdate {
-  (prev: unknown, next: unknown, listener: Listener): void
+interface BeforeUpdate {
+  (prev: unknown, next: unknown, update: Listener): void
 }
 
 export function observe<T extends Record<string, any>>(
   target: T,
-  listener: Listener,
   queue: Queue,
+  update: Listener,
   beforeUpdate: BeforeUpdate
 ): T {
   function get(target: any, key: string | symbol): any {
@@ -28,14 +28,14 @@ export function observe<T extends Record<string, any>>(
 
   function set(target: any, key: string | symbol, value: any): boolean {
     if (target[key] !== value) {
-      beforeUpdate(target[key], value, listener)
+      beforeUpdate(target[key], value, update)
 
       target[key] =
         isObserver(value) || !isObject(value)
           ? value
-          : observe(value, listener, queue, beforeUpdate)
+          : observe(value, queue, update, beforeUpdate)
 
-      queue.push(listener)
+      queue.push(update)
     }
 
     return true
@@ -43,9 +43,9 @@ export function observe<T extends Record<string, any>>(
 
   function deleteProperty(target: any, key: string | symbol): boolean {
     if (key in target) {
-      beforeUpdate(target[key], undefined, listener)
+      beforeUpdate(target[key], undefined, update)
       delete target[key]
-      queue.push(listener)
+      queue.push(update)
     }
 
     return true
