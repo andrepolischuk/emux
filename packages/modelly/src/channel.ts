@@ -1,18 +1,31 @@
 import {Queue} from './utils/queue'
 import {setPrivateProperties} from './utils/object'
-import {Events} from './events'
-import {Listener} from './types'
-import {observe} from './observer'
+import {makeObservable, Callback} from './observer'
 
-/** Transform model values before update */
-function beforeUpdate(prev: unknown, next: unknown, update: Listener): void {
-  if (prev instanceof Channel) {
-    prev.removeListener(Events.UPDATE, update)
-  }
+/** Internal update event */
+const UPDATE = 'update'
 
-  if (next instanceof Channel) {
-    next.on(Events.UPDATE, update)
+/** Create an observer callback */
+function createCallback(channel: Channel): Callback {
+  const queue = new Queue()
+  const listener = (): void => channel.emit(UPDATE)
+
+  return (prevValue: unknown, value: unknown) => {
+    if (prevValue instanceof Channel) {
+      prevValue.removeListener(UPDATE, listener)
+    }
+
+    if (value instanceof Channel) {
+      value.on(UPDATE, listener)
+    }
+
+    queue.push(listener)
   }
+}
+
+/** Event listener */
+export interface Listener {
+  (...args: any[]): void
 }
 
 /**
@@ -35,42 +48,22 @@ function beforeUpdate(prev: unknown, next: unknown, update: Listener): void {
  * ```
  */
 export class Channel {
-  /** Update queue */
-  private queue = new Queue()
-
   /** Event listeners */
-  private listeners: Record<string, Listener[]> = {}
+  private listeners: Record<string | symbol, Listener[]> = {}
 
   constructor() {
-    const update = (): void => this.emit(Events.UPDATE)
+    setPrivateProperties(this, 'listeners')
 
-    setPrivateProperties(this, 'queue', 'listeners')
-
-    return observe(this, this.queue, update, beforeUpdate)
+    return makeObservable(this, createCallback(this))
   }
 
   /** Check the listener is registered for a given event */
-  hasListener(eventType: string, listener: Listener): boolean {
+  hasListener(eventType: string | symbol, listener: Listener): boolean {
     return Boolean(this.listeners[eventType]?.includes(listener))
   }
 
-  /**
-   * Add a listener for a given event
-   *
-   * ```ts
-   * import {Events} from 'modelly'
-   * import {User} from './models'
-   *
-   * const currentUser = new User()
-   *
-   * currentUser.on(Events.UPDATE, () => {
-   *   // current user is fetched {displayName: '...', email: '...'}
-   * })
-   *
-   * currentUser.fetch()
-   * ```
-   */
-  on(eventType: string, listener: Listener): void {
+  /** Add a listener for a given event */
+  on(eventType: string | symbol, listener: Listener): void {
     if (!this.hasListener(eventType, listener)) {
       this.listeners[eventType] ??= []
       this.listeners[eventType].push(listener)
@@ -78,7 +71,7 @@ export class Channel {
   }
 
   /** Add a one-time listener for a given event */
-  once(eventType: string, listener: Listener): void {
+  once(eventType: string | symbol, listener: Listener): void {
     const onceListener = (...args: any[]): unknown => {
       this.off(eventType, onceListener)
 
@@ -89,12 +82,12 @@ export class Channel {
   }
 
   /** Alias for {@link Channel#on} */
-  addListener(eventType: string, listener: Listener): void {
+  addListener(eventType: string | symbol, listener: Listener): void {
     this.on(eventType, listener)
   }
 
-  /** Remove the listeners of a given event */
-  removeListener(eventType: string, listener: Listener): void {
+  /** Remove the listener of a given event */
+  removeListener(eventType: string | symbol, listener: Listener): void {
     if (this.hasListener(eventType, listener)) {
       this.listeners[eventType]?.splice(
         this.listeners[eventType].indexOf(listener),
@@ -104,12 +97,12 @@ export class Channel {
   }
 
   /** Alias for {@link Channel#removeListener} */
-  off(eventType: string, listener: Listener): void {
+  off(eventType: string | symbol, listener: Listener): void {
     this.removeListener(eventType, listener)
   }
 
   /** Calls listeners registered for a given event */
-  emit(eventType: string, ...args: any[]): void {
+  emit(eventType: string | symbol, ...args: any[]): void {
     this.listeners[eventType]?.forEach((listener) => {
       listener(...args)
     })

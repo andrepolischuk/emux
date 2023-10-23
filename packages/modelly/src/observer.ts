@@ -1,25 +1,25 @@
-import {Queue} from './utils/queue'
 import {isObject} from './utils/object'
-import {Listener} from './types'
 
-const observerKey = Symbol('observer')
+/** Internal observer key */
+const OBSERVER = Symbol('observer')
 
+/** Check is observer */
 function isObserver(value: any): boolean {
-  return !!value && value[observerKey]
+  return !!value && value[OBSERVER]
 }
 
-interface BeforeUpdate {
-  (prev: unknown, next: unknown, update: Listener): void
+/** Observer callback */
+export interface Callback {
+  (prevValue: unknown, value: unknown): void
 }
 
-export function observe<T extends Record<string, any>>(
+/** Create observable event emitter */
+export function makeObservable<T extends Record<string, any>>(
   target: T,
-  queue: Queue,
-  update: Listener,
-  beforeUpdate: BeforeUpdate
+  callback: Callback
 ): T {
   function get(target: any, key: string | symbol): any {
-    if (key === observerKey) {
+    if (key === OBSERVER) {
       return true
     }
 
@@ -28,14 +28,14 @@ export function observe<T extends Record<string, any>>(
 
   function set(target: any, key: string | symbol, value: any): boolean {
     if (target[key] !== value) {
-      beforeUpdate(target[key], value, update)
+      const prevValue = target[key]
 
       target[key] =
         isObserver(value) || !isObject(value)
           ? value
-          : observe(value, queue, update, beforeUpdate)
+          : makeObservable(value, callback)
 
-      queue.push(update)
+      callback(prevValue, target[key])
     }
 
     return true
@@ -43,9 +43,10 @@ export function observe<T extends Record<string, any>>(
 
   function deleteProperty(target: any, key: string | symbol): boolean {
     if (key in target) {
-      beforeUpdate(target[key], undefined, update)
+      const prevValue = target[key]
+
       delete target[key]
-      queue.push(update)
+      callback(prevValue, undefined)
     }
 
     return true

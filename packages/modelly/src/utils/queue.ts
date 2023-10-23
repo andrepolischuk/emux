@@ -1,5 +1,3 @@
-import {Listener} from '../types'
-
 const isSSR = typeof window === 'undefined'
 
 const setImmediate = isSSR
@@ -13,7 +11,7 @@ const clearImmediate = isSSR
 export class Queue {
   id?: any
 
-  push(callback: Listener): void {
+  push(callback: () => void): void {
     clearImmediate(this.id)
     this.id = setImmediate(() => callback())
   }

@@ -23,7 +23,7 @@ yarn add modelly
 ### Base example
 
 ```ts
-import {Channel, Events} from 'modelly'
+import {Channel} from 'modelly'
 import {api} from './api'
 
 class User extends Channel {
@@ -39,7 +39,7 @@ class User extends Channel {
 
 const currentUser = new User()
 
-currentUser.on(Events.UPDATE, () => {
+currentUser.on('update', () => {
   // current user is fetched {displayName: '...', email: '...'}
 })
 
@@ -49,11 +49,11 @@ currentUser.fetch()
 ### Nested models
 
 ```ts
-import {Channel, Events} from '../channel'
+import {Channel} from 'modelly'
 
-export class User extends Channel {
-  displayName?: string
-  email?: string
+class User extends Channel {
+  displayName: string
+  email: string
 
   async fetch() {
     const {displayName, email} = await api.getCurrentUser()
@@ -62,7 +62,7 @@ export class User extends Channel {
   }
 }
 
-export class Auth extends Channel {
+class Auth extends Channel {
   currentUser: User
 
   async login(credentials) {
@@ -74,9 +74,56 @@ export class Auth extends Channel {
 
 const auth = new Auth()
 
-auth.on(Events.UPDATE, () => {
+auth.on('update', () => {
   // session is created {currentUser: {}}
   // current user is fetched {currentUser: {displayName: '...', email: '...'}}
+})
+
+auth.login({email: '...', password: '...'})
+```
+
+### Custom events
+
+```ts
+import {Channel} from 'modelly'
+
+interface User {
+  displayName: string
+  email: string
+}
+
+class Auth extends Channel {
+  currentUser: User
+
+  async login(credentials) {
+    this.currentUser = await api.createSession(credentials)
+    this.emit('login')
+  }
+}
+
+interface Book {
+  title: string
+}
+
+class Books extends Channel {
+  books: Book[]
+
+  fetch = () => {
+    this.books = await api.getBooks(credentials)
+  }
+}
+
+const auth = new Auth()
+const books = new Books()
+
+auth.on('login', books.fetch)
+
+auth.on('update', () => {
+  // render auth in header
+})
+
+books.on('update', () => {
+  // render books list
 })
 
 auth.login({email: '...', password: '...'})
@@ -113,7 +160,7 @@ class User extends InjectedChannel {
 
 const currentUser = new User(api)
 
-currentUser.on(Events.UPDATE, () => {
+currentUser.on('update', () => {
   // current user is fetched {displayName: '...', email: '...'}
 })
 

@@ -1,5 +1,4 @@
 import {Channel} from './channel'
-import {Events} from './events'
 import {Auth, User} from './test/base'
 import {InjectedUser} from './test/injection'
 import {onceAnimationFrame} from './test/utils'
@@ -19,7 +18,7 @@ test('update a model', async () => {
   const user = new User()
   const userFn = jest.fn()
 
-  user.on(Events.UPDATE, userFn)
+  user.on('update', userFn)
 
   user.displayName = User.mock.displayName
   user.email = User.mock.email
@@ -34,7 +33,7 @@ test('update a model one-time', async () => {
   const user = new User()
   const userFn = jest.fn()
 
-  user.once(Events.UPDATE, userFn)
+  user.once('update', userFn)
 
   user.displayName = User.mock.displayName
   user.email = User.mock.email
@@ -57,7 +56,7 @@ test('async update a model', async () => {
   const user = new User()
   const userFn = jest.fn()
 
-  user.on(Events.UPDATE, userFn)
+  user.on('update', userFn)
 
   const promise = user.fetch()
 
@@ -92,8 +91,8 @@ test('update a nested model', async () => {
   const user = new User()
   const userFn = jest.fn()
 
-  auth.on(Events.UPDATE, authFn)
-  user.on(Events.UPDATE, userFn)
+  auth.on('update', authFn)
+  user.on('update', userFn)
 
   auth.currentUser = user
 
@@ -118,7 +117,7 @@ test('async update a nested model', async () => {
   const authFn = jest.fn()
   const userFn = jest.fn()
 
-  auth.on(Events.UPDATE, authFn)
+  auth.on('update', authFn)
 
   const loginPromise = auth.login()
 
@@ -135,7 +134,7 @@ test('async update a nested model', async () => {
   expect(authFn).toHaveBeenCalledTimes(2)
   expect(userFn).toHaveBeenCalledTimes(0)
 
-  auth.currentUser.on(Events.UPDATE, userFn)
+  auth.currentUser.on('update', userFn)
 
   const fetchPromise = auth.currentUser.fetch()
 
@@ -171,7 +170,7 @@ test('create a custom channel', async () => {
   const user = new InjectedUser(api)
   const userFn = jest.fn()
 
-  user.on(Events.UPDATE, userFn)
+  user.on('update', userFn)
 
   const promise = user.fetch()
 
