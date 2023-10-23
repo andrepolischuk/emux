@@ -1,6 +1,10 @@
 # Modelly
 
-Event-driven data models
+Event-driven data models for a business logic independent of the UI
+
+- Framework agnostic: manage a data outside of UI, you don’t need to touch the UI to run change-dependent logic, for example with React hooks
+- Decentralized: split a business logic before components, modules or chunks
+- Boilerplate-free: describe the data and flow of working with them
 
 ## Install
 

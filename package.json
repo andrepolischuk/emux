@@ -1,6 +1,6 @@
 {
   "name": "modelly-land",
-  "description": "",
+  "description": "Event-driven data models for a business logic independent of the UI",
   "scripts": {
     "build": "lerna exec -- tsc",
     "test": "jest",
