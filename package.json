@@ -1,6 +1,6 @@
 {
-  "name": "modelly",
-  "description": "",
+  "name": "modelly-land",
+  "description": "Event-driven data models for a business logic independent of the UI",
   "scripts": {
     "build": "lerna exec -- tsc",
     "test": "jest",
@@ -39,7 +39,7 @@
     "prettier": "^3.0.3",
     "size-limit": "^9.0.0",
     "ts-jest": "^29.1.1",
-    "typedoc": "^0.25.1",
+    "typedoc": "^0.25.2",
     "typescript": "^5.2.2"
   },
   "workspaces": [
