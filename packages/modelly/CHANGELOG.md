@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/andrepolischuk/modelly/compare/modelly@0.1.0...modelly@0.1.1) (2023-10-23)
+
+### Bug Fixes
+
+- **modelly:** fix release ([0f4f31c](https://github.com/andrepolischuk/modelly/commit/0f4f31c19949939825808074ec879025c2a9121f))
+
 # 0.1.0 (2023-10-23)
 
 ### Features
