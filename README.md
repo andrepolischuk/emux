@@ -2,6 +2,45 @@
 
 Event-driven data models
 
+## Install
+
+```sh
+npm install modelly
+```
+
+or
+
+```sh
+yarn add modelly
+```
+
+## Usage
+
+```ts
+import {Channel} from 'modelly'
+import * as api from './api'
+
+class User extends Channel {
+  displayName?: string
+  email?: string
+
+  async fetch() {
+    const {displayName, email} = await api.getCurrentUser()
+    this.displayName = displayName
+    this.email = email
+  }
+}
+
+const currentUser = new User()
+
+currentUser.listen(() => {
+  // currentUser is fetched
+  // {displayName: '...', email: '...'}
+})
+
+currentUser.fetch()
+```
+
 ## Contributing
 
 ### Dev environment

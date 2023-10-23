@@ -1,7 +1,9 @@
 {
   "extends": "@rambler-tech/typedoc-config",
   "readme": "README.md",
-  "name": "Modelly",
-  "entryPoints": "packages/*",
-  "out": "public"
+  "name": "Modelly Land",
+  "entryPoints": ["packages/*"],
+  "entryPointStrategy": "packages",
+  "out": "public",
+  "includeVersion": true
 }

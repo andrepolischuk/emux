@@ -1,0 +1,6 @@
+[
+  {
+    "path": "packages/modelly/dist/index.js",
+    "limit": "600 B"
+  }
+]
