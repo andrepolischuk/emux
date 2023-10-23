@@ -40,11 +40,46 @@ class User extends Channel {
 const currentUser = new User()
 
 currentUser.on(Events.UPDATE, () => {
-  // currentUser is fetched
-  // {displayName: '...', email: '...'}
+  // current user is fetched {displayName: '...', email: '...'}
 })
 
 currentUser.fetch()
+```
+
+### Nested models
+
+```ts
+import {Channel, Events} from '../channel'
+
+export class User extends Channel {
+  displayName?: string
+  email?: string
+
+  async fetch() {
+    const {displayName, email} = await api.getCurrentUser()
+    this.displayName = displayName
+    this.email = email
+  }
+}
+
+export class Auth extends Channel {
+  currentUser: User
+
+  async login(credentials) {
+    await api.createSession(credentials)
+    this.currentUser = new User()
+    this.currentUser.fetch()
+  }
+}
+
+const auth = new Auth()
+
+auth.on(Events.UPDATE, () => {
+  // session is created {currentUser: {}}
+  // current user is fetched {currentUser: {displayName: '...', email: '...'}}
+})
+
+auth.login({email: '...', password: '...'})
 ```
 
 ### Extend a channel
@@ -79,8 +114,7 @@ class User extends InjectedChannel {
 const currentUser = new User(api)
 
 currentUser.on(Events.UPDATE, () => {
-  // currentUser is fetched
-  // {displayName: '...', email: '...'}
+  // current user is fetched {displayName: '...', email: '...'}
 })
 
 currentUser.fetch()
