@@ -21,10 +21,8 @@ jobs:
           node-version: '18.x'
       - run: yarn
       - run: |
-          git config --global user.email $BOT_EMAIL
-          git config --global user.name rambler-ui-bot
-        env:
-          BOT_EMAIL: ${{ secrets.BOT_EMAIL }}
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor}}@users.noreply.github.com"
       - run: |
           echo "@rambler-tech:registry=https://registry.npmjs.org/" > .npmrc
           echo "registry=https://registry.npmjs.org/" >> .npmrc
