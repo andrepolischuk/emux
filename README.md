@@ -20,8 +20,10 @@ yarn add modelly
 
 ## Usage
 
+### Base example
+
 ```ts
-import {Channel} from 'modelly'
+import {Channel, Events} from 'modelly'
 import * as api from './api'
 
 class User extends Channel {
@@ -37,7 +39,7 @@ class User extends Channel {
 
 const currentUser = new User()
 
-currentUser.listen(() => {
+currentUser.on(Events.UPDATE, () => {
   // currentUser is fetched
   // {displayName: '...', email: '...'}
 })

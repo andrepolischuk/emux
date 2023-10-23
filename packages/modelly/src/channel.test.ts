@@ -1,4 +1,5 @@
 import {Channel} from './channel'
+import {Events} from './events'
 import {Auth} from './test/auth'
 import {User} from './test/user'
 import {onceAnimationFrame} from './test/utils'
@@ -18,7 +19,7 @@ test('update a model', async () => {
   const user = new User()
   const userFn = jest.fn()
 
-  user.listen(userFn)
+  user.on(Events.UPDATE, userFn)
 
   user.displayName = User.mock.displayName
   user.email = User.mock.email
@@ -29,11 +30,34 @@ test('update a model', async () => {
   expect(userFn).toHaveBeenCalledTimes(1)
 })
 
+test('update a model one-time', async () => {
+  const user = new User()
+  const userFn = jest.fn()
+
+  user.once(Events.UPDATE, userFn)
+
+  user.displayName = User.mock.displayName
+  user.email = User.mock.email
+
+  await onceAnimationFrame()
+
+  expect(user).toEqual(User.mock)
+  expect(userFn).toHaveBeenCalledTimes(1)
+
+  delete user.displayName
+  delete user.email
+
+  await onceAnimationFrame()
+
+  expect(user).toEqual({})
+  expect(userFn).toHaveBeenCalledTimes(1)
+})
+
 test('async update a model', async () => {
   const user = new User()
   const userFn = jest.fn()
 
-  user.listen(userFn)
+  user.on(Events.UPDATE, userFn)
 
   const promise = user.fetch()
 
@@ -68,8 +92,8 @@ test('update a nested model', async () => {
   const user = new User()
   const userFn = jest.fn()
 
-  auth.listen(authFn)
-  user.listen(userFn)
+  auth.on(Events.UPDATE, authFn)
+  user.on(Events.UPDATE, userFn)
 
   auth.currentUser = user
 
@@ -94,7 +118,7 @@ test('async update a nested model', async () => {
   const authFn = jest.fn()
   const userFn = jest.fn()
 
-  auth.listen(authFn)
+  auth.on(Events.UPDATE, authFn)
 
   const loginPromise = auth.login()
 
@@ -111,7 +135,7 @@ test('async update a nested model', async () => {
   expect(authFn).toHaveBeenCalledTimes(2)
   expect(userFn).toHaveBeenCalledTimes(0)
 
-  auth.currentUser.listen(userFn)
+  auth.currentUser.on(Events.UPDATE, userFn)
 
   const fetchPromise = auth.currentUser.fetch()
 
@@ -130,4 +154,15 @@ test('async update a nested model', async () => {
   })
   expect(authFn).toHaveBeenCalledTimes(4)
   expect(userFn).toHaveBeenCalledTimes(2)
+})
+
+test('trigger a custom event', async () => {
+  const user = new User()
+  const userFn = jest.fn()
+
+  user.once('hello', userFn)
+  user.emit('hello', 'world')
+
+  expect(userFn).toHaveBeenCalledTimes(1)
+  expect(userFn).toHaveBeenCalledWith('world')
 })

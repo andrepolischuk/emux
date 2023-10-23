@@ -6,9 +6,9 @@ export class User extends Channel {
     email: 'edsger@mail.com'
   }
 
-  fetching: boolean
-  displayName: string
-  email: string
+  fetching?: boolean
+  displayName?: string
+  email?: string
 
   fetch(): Promise<void> {
     this.fetching = true
