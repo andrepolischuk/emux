@@ -2,7 +2,7 @@ import {Queue} from './utils/queue'
 import {setPrivateProperties} from './utils/object'
 import {makeObservable, Callback} from './observer'
 
-/** Internal update event */
+/** Channel update event */
 const UPDATE = 'update'
 
 /** Create an observer callback */
