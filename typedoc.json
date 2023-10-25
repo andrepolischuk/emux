@@ -1,9 +1,12 @@
 {
   "extends": "@rambler-tech/typedoc-config",
+  "customTitle": "Modelly",
+  "customDescription": "Event-driven data models for a business logic independent of the UI",
   "readme": "README.md",
-  "name": "Modelly Land",
-  "entryPoints": ["packages/*"],
+  "entryPoints": "packages/*",
   "entryPointStrategy": "packages",
   "out": "public",
-  "includeVersion": true
+  "navigationLinks": {
+    "Github": "https://github.com/andrepolischuk/modelly"
+  }
 }

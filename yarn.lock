@@ -912,6 +912,24 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@knodes/typedoc-plugin-pages@^0.23.4":
+  version "0.23.4"
+  resolved "https://registry.yarnpkg.com/@knodes/typedoc-plugin-pages/-/typedoc-plugin-pages-0.23.4.tgz#0a647e6c2c48a4d1cd1092d1bfa2e5a2668cd118"
+  integrity sha512-3LMS2TDV/lH/BKfxNEjCEhAwSCxOuQRF742EoYoP63/AQmIM/EZKDwShn1AYu4CtVAHvJpixuKF0VeFDLjgrbQ==
+  dependencies:
+    "@knodes/typedoc-pluginutils" "~0.23.4"
+    lodash "^4.17.21"
+
+"@knodes/typedoc-pluginutils@~0.23.4":
+  version "0.23.4"
+  resolved "https://registry.yarnpkg.com/@knodes/typedoc-pluginutils/-/typedoc-pluginutils-0.23.4.tgz#9132c2a9247d46dfa9bb2816f4a3f627005f933a"
+  integrity sha512-uO7t9XxYW1DMjVFTgmRs2p431+AsmvnX4CrrB/zkauo8mZSLS3CppMKHBVE/Lk1cFO73vgfyJReRK98X/8BzUA==
+  dependencies:
+    fastest-levenshtein "^1.0.16"
+    lodash "^4.17.21"
+    pkg-up "^3.1.0"
+    semver "^7.3.5"
+
 "@lerna/child-process@7.3.0":
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/@lerna/child-process/-/child-process-7.3.0.tgz#c56488a8a881f22a64793bf9339c5a2450a18559"
@@ -1314,10 +1332,13 @@
   resolved "https://registry.yarnpkg.com/@rambler-tech/ts-config/-/ts-config-0.0.2.tgz#0c13c35c85a13e68e389551b081d93a342371462"
   integrity sha512-H1v/IHde22MW5OedWiJz76N9dkvRkji98Y0C9RDyNHXX4V2S2y5kUY9BboJ/ov9U9GfaTuVQvyA0B8+vy1d9Qg==
 
-"@rambler-tech/typedoc-config@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@rambler-tech/typedoc-config/-/typedoc-config-0.0.2.tgz#c67786126459e37f5f890e0d0eb29c05bc7be7cf"
-  integrity sha512-i+3aFFgxMuvVAB1A6GrBtzMiuvdUPjB2n5k7cd0v+Kxt/FYS/18Gqy9rP3LVwEIewxnNhSGPZzU/2keHJEsntw==
+"@rambler-tech/typedoc-config@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@rambler-tech/typedoc-config/-/typedoc-config-0.3.0.tgz#67feae1cadcf34d6e734831980fb2f92a2919c83"
+  integrity sha512-W51DBbvg1LD3IIN8rXbOlzWtDFTJcXkXnV6iZ5bN/WdVjUrsSqXZt0M7GFT9UQfGSWv/fgbErFzFSvhnEBnAdg==
+  dependencies:
+    "@knodes/typedoc-plugin-pages" "^0.23.4"
+    typedoc-plugin-extras "^3.0.0"
 
 "@rushstack/eslint-patch@^1.1.0", "@rushstack/eslint-patch@^1.3.3":
   version "1.4.0"
@@ -3541,6 +3562,11 @@ fast-levenshtein@^2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
 
+fastest-levenshtein@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.16.tgz#210e61b6ff181de91ea9b3d1b84fdedd47e034e5"
+  integrity sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==
+
 fastq@^1.6.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.15.0.tgz#d04d07c6a2a68fe4599fea8d2e103a937fae6b3a"
@@ -3589,6 +3615,13 @@ find-up@^2.0.0:
   integrity sha512-NWzkk0jSJtTt08+FBFMvXoeZnOJD+jTtsRmBYbAIzJdX6l7dLgR7CTubCM5/eDdPUBvLCeVasP1brfVR/9/EZQ==
   dependencies:
     locate-path "^2.0.0"
+
+find-up@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/find-up/-/find-up-3.0.0.tgz#49169f1d7993430646da61ecc5ae355c21c97b73"
+  integrity sha512-1yD6RmLI1XBfxugvORwlck6f75tYL+iR0jqwsOrOxMZyGYqUuDhJ0l4AXdO1iX/FTs9cBAMEk1gWSEx1kSbylg==
+  dependencies:
+    locate-path "^3.0.0"
 
 find-up@^4.0.0, find-up@^4.1.0:
   version "4.1.0"
@@ -5381,6 +5414,14 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
+locate-path@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-3.0.0.tgz#dbec3b3ab759758071b58fe59fc41871af21400e"
+  integrity sha512-7AO748wWnIhNqAuaty2ZWHkQHRSNfPVIsPIfwEOWO22AmaoVrWavlOcMR5nzTLNYvp36X220/maaRsrec1G65A==
+  dependencies:
+    p-locate "^3.0.0"
+    path-exists "^3.0.0"
+
 locate-path@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-5.0.0.tgz#1afba396afd676a6d42504d0a67a3a7eb9f62aa0"
@@ -6253,7 +6294,7 @@ p-limit@^1.1.0:
   dependencies:
     p-try "^1.0.0"
 
-p-limit@^2.2.0:
+p-limit@^2.0.0, p-limit@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.3.0.tgz#3dd33c647a214fdfffd835933eb086da0dc21db1"
   integrity sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==
@@ -6273,6 +6314,13 @@ p-locate@^2.0.0:
   integrity sha512-nQja7m7gSKuewoVRen45CtVfODR3crN3goVQ0DDZ9N3yHxgpkuBhZqsaiotSQRrADUrne346peY7kT3TSACykg==
   dependencies:
     p-limit "^1.1.0"
+
+p-locate@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-3.0.0.tgz#322d69a05c0264b25997d9f40cd8a891ab0064a4"
+  integrity sha512-x+12w/To+4GFfgJhBEpiDcLozRJGegY+Ei7/z0tSLkMmxGZNybVMSfWj9aJn8Z5Fc7dBUNJOOVgPv2H7IwulSQ==
+  dependencies:
+    p-limit "^2.0.0"
 
 p-locate@^4.1.0:
   version "4.1.0"
@@ -6508,6 +6556,13 @@ pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+pkg-up@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/pkg-up/-/pkg-up-3.1.0.tgz#100ec235cc150e4fd42519412596a28512a0def5"
+  integrity sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==
+  dependencies:
+    find-up "^3.0.0"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -7690,6 +7745,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
+
+typedoc-plugin-extras@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/typedoc-plugin-extras/-/typedoc-plugin-extras-3.0.0.tgz#e41eeb815aaa572beb8c274834a6b7f51dd55b24"
+  integrity sha512-eiAe3qtm2WbV5owdncpt0zHZPqsNZH2mzNGILPd4zqrvEZie3Et9es4cpGZ+8lHO/SI0pVKwsAj7IuMxPNOdYg==
 
 typedoc@^0.25.2:
   version "0.25.2"

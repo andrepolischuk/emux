@@ -1,5 +1,5 @@
 {
-  "name": "modelly-land",
+  "name": "modelly",
   "description": "Event-driven data models for a business logic independent of the UI",
   "scripts": {
     "build": "lerna exec -- tsc",
@@ -26,7 +26,7 @@
     "@rambler-tech/eslint-config": "^0.0.2",
     "@rambler-tech/prettier-config": "^0.0.2",
     "@rambler-tech/ts-config": "^0.0.2",
-    "@rambler-tech/typedoc-config": "^0.0.2",
+    "@rambler-tech/typedoc-config": "^0.3.0",
     "@size-limit/preset-small-lib": "^9.0.0",
     "@types/jest": "^29.5.5",
     "eslint": "^8.49.0",
