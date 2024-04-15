@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/andrepolischuk/modelly/compare/modelly@0.1.1...modelly@0.2.0) (2024-04-15)
+
+### Features
+
+- add wait an event ([f0f7447](https://github.com/andrepolischuk/modelly/commit/f0f7447b76093037472699b5ba8d5f98cc0af14a))
+
 ## [0.1.1](https://github.com/andrepolischuk/modelly/compare/modelly@0.1.0...modelly@0.1.1) (2023-10-23)
 
 ### Bug Fixes
