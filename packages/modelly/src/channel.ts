@@ -86,6 +86,11 @@ export class Channel {
     this.on(eventType, listener)
   }
 
+  /** Wait a given event one-time */
+  wait(eventType: string | symbol): Promise<void> {
+    return new Promise((resolve) => this.once(eventType, resolve))
+  }
+
   /** Remove the listener of a given event */
   removeListener(eventType: string | symbol, listener: Listener): void {
     if (this.hasListener(eventType, listener)) {
@@ -103,7 +108,9 @@ export class Channel {
 
   /** Calls listeners registered for a given event */
   emit(eventType: string | symbol, ...args: any[]): void {
-    this.listeners[eventType]?.forEach((listener) => {
+    const listeners = [...(this.listeners[eventType] ?? [])]
+
+    listeners?.forEach((listener) => {
       listener(...args)
     })
   }

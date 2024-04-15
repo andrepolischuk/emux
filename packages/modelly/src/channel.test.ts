@@ -1,7 +1,6 @@
 import {Channel} from './channel'
 import {Auth, User} from './test/base'
 import {InjectedUser} from './test/injection'
-import {onceAnimationFrame} from './test/utils'
 
 test('create a model', () => {
   class CurrentUser extends Channel {
@@ -23,7 +22,7 @@ test('update a model', async () => {
   user.displayName = User.mock.displayName
   user.email = User.mock.email
 
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(user).toEqual(User.mock)
   expect(userFn).toHaveBeenCalledTimes(1)
@@ -38,7 +37,7 @@ test('update a model one-time', async () => {
   user.displayName = User.mock.displayName
   user.email = User.mock.email
 
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(user).toEqual(User.mock)
   expect(userFn).toHaveBeenCalledTimes(1)
@@ -46,7 +45,7 @@ test('update a model one-time', async () => {
   delete user.displayName
   delete user.email
 
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(user).toEqual({})
   expect(userFn).toHaveBeenCalledTimes(1)
@@ -60,13 +59,13 @@ test('async update a model', async () => {
 
   const promise = user.fetch()
 
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(user).toEqual({fetching: true})
   expect(userFn).toHaveBeenCalledTimes(1)
 
   await promise
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(user).toEqual({fetching: false, ...User.mock})
   expect(userFn).toHaveBeenCalledTimes(2)
@@ -96,7 +95,7 @@ test('update a nested model', async () => {
 
   auth.currentUser = user
 
-  await onceAnimationFrame()
+  await auth.wait('update')
 
   expect(auth).toEqual({currentUser: {}})
   expect(authFn).toHaveBeenCalledTimes(1)
@@ -105,7 +104,7 @@ test('update a nested model', async () => {
   user.displayName = User.mock.displayName
   user.email = User.mock.email
 
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(auth).toEqual({currentUser: User.mock})
   expect(authFn).toHaveBeenCalledTimes(2)
@@ -121,14 +120,14 @@ test('async update a nested model', async () => {
 
   const loginPromise = auth.login()
 
-  await onceAnimationFrame()
+  await auth.wait('update')
 
   expect(auth).toEqual({fetching: true})
   expect(authFn).toHaveBeenCalledTimes(1)
   expect(userFn).toHaveBeenCalledTimes(0)
 
   await loginPromise
-  await onceAnimationFrame()
+  await auth.wait('update')
 
   expect(auth).toEqual({fetching: false, currentUser: {}})
   expect(authFn).toHaveBeenCalledTimes(2)
@@ -138,14 +137,14 @@ test('async update a nested model', async () => {
 
   const fetchPromise = auth.currentUser.fetch()
 
-  await onceAnimationFrame()
+  await auth.wait('update')
 
   expect(auth).toEqual({fetching: false, currentUser: {fetching: true}})
   expect(authFn).toHaveBeenCalledTimes(3)
   expect(userFn).toHaveBeenCalledTimes(1)
 
   await fetchPromise
-  await onceAnimationFrame()
+  await auth.wait('update')
 
   expect(auth).toEqual({
     fetching: false,
@@ -174,14 +173,14 @@ test('create a custom channel', async () => {
 
   const promise = user.fetch()
 
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(user).toEqual({api, fetching: true})
   expect(userFn).toHaveBeenCalledTimes(1)
   expect(api.getCurrentUser).toHaveBeenCalledTimes(1)
 
   await promise
-  await onceAnimationFrame()
+  await user.wait('update')
 
   expect(user).toEqual({api, fetching: false, ...User.mock})
   expect(userFn).toHaveBeenCalledTimes(2)
